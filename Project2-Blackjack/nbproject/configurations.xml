@@ -16,6 +16,7 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>Deck.cpp</itemPath>
+      <itemPath>Player.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -45,6 +46,8 @@
       <item path="Deck.cpp" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Deck.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Player.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Player.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -76,6 +79,8 @@
       <item path="Deck.cpp" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Deck.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Player.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Player.h" ex="false" tool="3" flavor2="0">
       </item>

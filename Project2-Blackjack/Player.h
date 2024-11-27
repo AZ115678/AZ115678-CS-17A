@@ -9,13 +9,39 @@
 #define PLAYER_H
 
 #include "Cards.h"
+#include "Deck.h"
+#include <vector>
 
-struct Player{
-    float cash;
-    int handSize = 2;
-    int handValue;
-    bool hasAce;
-    vector<Cards> hand;
+using namespace std;
+
+class Player{
+    private:
+        float cash, bet;
+        int handSize = 2;
+        int handValue;
+        bool hasAce;
+        string name;
+        vector<Cards> hand;
+        int setHandValue();
+    public:
+        Player();
+        Player(string);
+        ~Player();
+        void initializeHand();
+        void drawCard(Deck *);
+        void displayHand(bool);
+        void setBet(float);
+        void doubleBet();
+        void winBet(bool);
+        void loseBet();
+        void pushBet();
+        string getSuit(int);
+        void setCash(int c){cash = c;}
+        float getCash(){return cash;}
+        float getBet(){return bet;}
+        int getHandValue(){return handValue;}
+        int getHandSize(){return handSize;}
+        bool checkBust();
 };
 
 #endif /* PLAYER_H */
