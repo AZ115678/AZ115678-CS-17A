@@ -4,8 +4,11 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>AbsPlayer.h</itemPath>
       <itemPath>Cards.h</itemPath>
+      <itemPath>Dealer.h</itemPath>
       <itemPath>Deck.h</itemPath>
+      <itemPath>Game.h</itemPath>
       <itemPath>Player.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -15,7 +18,9 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>Dealer.cpp</itemPath>
       <itemPath>Deck.cpp</itemPath>
+      <itemPath>Game.cpp</itemPath>
       <itemPath>Player.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
@@ -41,11 +46,21 @@
       </toolsSet>
       <compileType>
       </compileType>
+      <item path="AbsPlayer.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cards.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Dealer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Dealer.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Deck.cpp" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Deck.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Game.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Game.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Player.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -74,11 +89,21 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="AbsPlayer.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Cards.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Dealer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Dealer.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Deck.cpp" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Deck.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Game.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Game.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Player.cpp" ex="false" tool="1" flavor2="0">
       </item>

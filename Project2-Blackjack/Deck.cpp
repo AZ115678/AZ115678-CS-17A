@@ -7,10 +7,10 @@
 
 using namespace std;
 
+int Deck::cardsDrawn = 0;
+
 Deck::Deck(){
-    cout << "Hi!" << endl;
     size = 52;
-    cardsDrawn = 0;
     shuffleMarker = 36;
     cards = initializeDeck(size);
     shuffleDeck();
@@ -19,7 +19,6 @@ Deck::Deck(){
 }
 Deck::~Deck(){
     delete []cards;
-    cout << "Bye!" << endl;
 }
 Cards *Deck::initializeDeck(int size){
     //for loop to fill new Cards array with information like suit, name, and values based on order
