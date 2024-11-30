@@ -1,4 +1,7 @@
-build/Debug/Cygwin-Windows/Player.o: Player.cpp Player.h Cards.h Deck.h
+build/Debug/Cygwin-Windows/Player.o: Player.cpp Player.h Dealer.h \
+ AbsPlayer.h Deck.h Cards.h
 Player.h:
-Cards.h:
+Dealer.h:
+AbsPlayer.h:
 Deck.h:
+Cards.h:

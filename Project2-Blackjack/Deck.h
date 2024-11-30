@@ -1,8 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/cppFiles/file.h to edit this template
- */
-
 /* 
  * File:   Deck.h
  * Author: buddy
@@ -17,7 +12,8 @@
 
 class Deck{
     private:
-        int size, cardsDrawn, shuffleMarker;
+        static int cardsDrawn;
+        int size, shuffleMarker;
         Cards *cards;
         Cards *initializeDeck(int);
         void shuffleDeck();
@@ -32,6 +28,7 @@ class Deck{
         const string getSuit(int) const;
         
 };
+
 
 #endif /* DECK_H */
 
