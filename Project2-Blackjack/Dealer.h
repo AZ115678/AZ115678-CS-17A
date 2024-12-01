@@ -1,6 +1,6 @@
 /* 
  * File:   Dealer.h
- * Author: buddy
+ * Author: Adam Zavala
  *
  * Created on November 29, 2024, 4:47 PM
  */
@@ -28,7 +28,8 @@ class Dealer : public AbsPlayer{
         virtual int getHandValue(){return handValue;}
         virtual int getHandSize(){return handSize;}
         bool checkBust();
-        
+        bool operator > (Dealer *);
+        bool operator == (Dealer *);
 };
 
 

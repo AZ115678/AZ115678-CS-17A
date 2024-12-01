@@ -1,7 +1,7 @@
 /* 
  * File:   main.cpp
  * Author: Adam Zavala
- * Purpose: Project 2 - Simple Blackjack that displays concepts learned from chapters 9-12
+ * Purpose: Project 2 - Simple Blackjack that displays concepts learned from chapters 13-16
  * Created on October 17, 2024, 12:13 PM
  */
 

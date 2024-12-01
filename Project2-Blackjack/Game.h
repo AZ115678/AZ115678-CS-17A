@@ -1,6 +1,6 @@
 /* 
  * File:   Game.h
- * Author: buddy
+ * Author: Adam Zavala
  *
  * Created on November 29, 2024, 12:34 PM
  */
@@ -18,8 +18,10 @@ class Game{
         bool stand, bust, blackjack;
         void initializeHand();
         void playHand();
+        float validateBet();
         void playerActions();
         void dealerActions();
+        void winConditions();
     public:
         Game();
         ~Game();

@@ -1,7 +1,7 @@
 /* 
  * File:   Player.h
  * Author: Adam Zavala
- * Purpose: Structure to hold player and dealer information
+ * Purpose: 
  * Created on November 4, 2024, 12:11 PM
  */
 
@@ -10,7 +10,6 @@
 
 #include "Dealer.h"
 #include "Cards.h"
-//#include "Deck.h"
 #include <vector>
 
 using namespace std;
@@ -22,7 +21,10 @@ class Player : public Dealer{
     public:
         Player();
         Player(string);
+        //copy constructor
+        Player(const Player &);
         ~Player();
+        void displayHand();
         void setBet(float);
         void doubleBet();
         void winBet(bool);
@@ -31,6 +33,7 @@ class Player : public Dealer{
         void setCash(int c){cash = c;}
         float getCash(){return cash;}
         float getBet(){return bet;}
+        Player& operator++();
 };
 
 #endif /* PLAYER_H */
