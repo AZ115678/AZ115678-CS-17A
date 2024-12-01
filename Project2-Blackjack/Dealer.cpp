@@ -16,27 +16,17 @@ void Dealer::drawCard(Deck *deck){
 }
 void Dealer::displayHand(bool stand){
     cout << "\n" << name << " Hand: " << endl;
-    if(name == "Player"){
+    if(stand == false){
+        cout << hand[0].name << " of " << getSuit(0) << endl;
+        cout << "Dealer's second card is currently face down.\n" << endl;
+    }
+    else{
         for(int i=0;i<handSize;i++){
             cout << hand[i].name << " of " << getSuit(i) << endl;
         }
         handValue = setHandValue();
-        cout << "Player at " << handValue << ": \n" << endl;
+        cout << name << " is at " << handValue << "\n" << endl;
     }
-    else{
-        if(stand == false){
-            cout << hand[0].name << " of " << getSuit(0) << endl;
-            cout << "Dealer's second card is currently face down.\n" << endl;
-        }
-        else{
-            for(int i=0;i<handSize;i++){
-                cout << hand[i].name << " of " << getSuit(i) << endl;
-            }
-            handValue = setHandValue();
-            cout << "Dealer is at " << handValue << "\n" << endl;
-        }
-    }
-    
 }
 string Dealer::getSuit(int index){
     string suit;
@@ -69,10 +59,31 @@ bool Dealer::checkBust(){
     handValue = setHandValue();
     if(handValue > 21){
         bust = true;
-        cout << "Bust!" << endl;
+        cout << name <<" busts..." << endl;
     }
     else{
         bust = false;
     }
     return bust;
+}
+
+bool Dealer::operator > (Dealer *right){
+    bool status;
+    if(handValue > right->getHandValue()){
+        status = true;
+    }
+    else{
+        status = false;
+    }
+    return status;
+}
+bool Dealer::operator == (Dealer *right){
+    bool status;
+    if(handValue == right->getHandValue()){
+        status = true;
+    }
+    else{
+        status = false;
+    }
+    return status;
 }

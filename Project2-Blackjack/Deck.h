@@ -1,6 +1,6 @@
 /* 
  * File:   Deck.h
- * Author: buddy
+ * Author: Adam Zavala
  *
  * Created on November 26, 2024, 6:26 PM
  */

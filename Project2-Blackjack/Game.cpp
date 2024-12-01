@@ -38,24 +38,13 @@ void Game::playGame(){
     while(player->getCash() > 0){
         //checks if the deck is in need of a reshuffling
         deck->checkShuffle();
-        //player enters bet to get started
-        cout << "Please enter bet (Cash: $" << player->getCash() << ")\n(Enter 0 to exit) : " << endl;
-        cin >> bet;
+        //function that retrieves bet and validates input
+        bet = validateBet();
+        //if input is 0, player quits game
         if(bet == 0){
             //saveFile(dataFile, player);
             cout << "Thanks for playing!" << endl;
             return;
-        }
-        //input validation for player bet amount
-        while(bet>player->getCash() || bet < 0){
-            if(bet > player->getCash()){
-                cout << "Enter bet that you can afford!" << endl;
-            }
-            else {
-                cout << "Enter amount bigger than 0!" << endl;
-            }
-
-            cin >> bet;
         }
         player->setBet(bet);
         //once bet is placed, the player and dealer draws two
@@ -75,13 +64,13 @@ void Game::playHand(){
     
     if(bust == true){
         stand = true;
-        player->displayHand(stand);
+        player->displayHand();
         dealer->displayHand(stand);
         cout << "You lost..." << endl;
     }
     //after player action is done, check for any blackjack actions
     else if(blackjack == true){
-        player->displayHand(stand);
+        player->displayHand();
         dealer->displayHand(stand);
         //checks if player and dealer both got blackjack from initial hand
         if(dealer->getHandValue() == 21){
@@ -96,7 +85,42 @@ void Game::playHand(){
     //dealer's actions start if player action is done and no blackjack was drawn
     else{
         dealerActions();
+        //checks if player wins after dealer actions are complete
+        winConditions();
     }
+}
+float Game::validateBet(){
+    bool validated = false;
+    float bet;
+    while(validated == false){
+        cout << "Please enter bet (Cash: $" << player->getCash() << ")\n(Enter 0 to exit) : " << endl;
+        try{
+            //cin >> bet;
+            if(!(cin>>bet)){
+                cin.clear();
+                cin.ignore();
+                string exceptionString = "Please enter a number!\n";
+                throw exceptionString;
+            }
+            if(bet>player->getCash() || bet < 0){
+                if(bet > player->getCash()){
+                    string exceptionString = "Enter bet that you can afford!\n";
+                    throw exceptionString;
+                }
+                else{
+                    string exceptionString = "Enter amount bigger than 0!\n";
+                    throw exceptionString;
+                }
+            }
+            validated = true;
+        }
+        catch(string exceptionString){
+            cout << exceptionString;
+        }
+    }
+    
+    return bet;
+    
 }
 void Game::playerActions(){
     const int SIZE = 80;
@@ -104,7 +128,7 @@ void Game::playerActions(){
     //loops through until player either chooses to stand or busts
     cin.ignore();
     while(stand == false && bust == false){
-        player->displayHand(stand);
+        player->displayHand();
         dealer->displayHand(stand);
         //checks if player has a blackjack from initial hand
         if(player->getHandValue() == 21 && player->getHandSize() == 2){
@@ -143,18 +167,20 @@ void Game::playerActions(){
     }
 }
 void Game::dealerActions(){
-    player->displayHand(stand);
+    player->displayHand();
     dealer->displayHand(stand);
     //dealer must hit on hand value 16 and below
     while(dealer->getHandValue() < 17){
         dealer->drawCard(deck);
-        player->displayHand(stand);
+        player->displayHand();
         dealer->displayHand(stand);
     }
+    
+}
+void Game::winConditions(){
     //if statement that checks if player or dealer wins bet by comparing hands
     //checks if dealer busts
-    if(dealer->getHandValue() > 21){
-        cout << "Dealer busts...\n"<< endl;
+    if(dealer->checkBust()){
         player->winBet(blackjack);
     }
     //checks for blackjack
@@ -162,12 +188,15 @@ void Game::dealerActions(){
         cout << "Dealer reveals a blackjack...\n"<< endl;
         player->loseBet();
     }
-    //compares hand
-    else if(player->getHandValue() > dealer->getHandValue()){
-        player->winBet(blackjack);
+    //compares hand with overloaded > relational operator
+    else if(player->operator >(dealer)){
+        //
+        Player temp(*player);
+        *player = ++temp;
+        //player->winBet(blackjack);
     }
-    //checks for push
-    else if(player->getHandValue() == dealer->getHandValue()){
+    //checks for push with overloaded == relational operator
+    else if(player->operator ==(dealer)){
         player->pushBet();
     }
     else{

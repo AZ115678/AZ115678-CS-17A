@@ -1,6 +1,6 @@
 /* 
  * File:   AbsPlayer.h
- * Author: buddy
+ * Author: Adam Zavala
  *
  * Created on November 29, 2024, 3:46 PM
  */
