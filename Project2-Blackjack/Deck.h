@@ -29,6 +29,5 @@ class Deck{
         
 };
 
-
 #endif /* DECK_H */
 

@@ -9,6 +9,7 @@
 #define GAME_H
 #include "Player.h"
 #include <fstream>
+
 class Game{
     private:
         Player *player;
@@ -18,10 +19,13 @@ class Game{
         bool stand, bust, blackjack;
         void initializeHand();
         void playHand();
-        float validateBet();
+        template <typename T> T validateBet();
+        char validateInput();
         void playerActions();
         void dealerActions();
         void winConditions();
+        void loadProfile();
+        void newProfile();
     public:
         Game();
         ~Game();
@@ -31,4 +35,3 @@ class Game{
 };
 
 #endif /* GAME_H */
-

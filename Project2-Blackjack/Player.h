@@ -21,6 +21,7 @@ class Player : public Dealer{
     public:
         Player();
         Player(string);
+        Player(string, float);
         //copy constructor
         Player(const Player &);
         ~Player();
@@ -33,8 +34,8 @@ class Player : public Dealer{
         void setCash(int c){cash = c;}
         float getCash(){return cash;}
         float getBet(){return bet;}
+        string getName(){return name;}
         Player& operator++();
 };
 
 #endif /* PLAYER_H */
-

@@ -8,7 +8,7 @@
 using namespace std;
 
 int Deck::cardsDrawn = 0;
-
+//deck constructor
 Deck::Deck(){
     size = 52;
     shuffleMarker = 36;
@@ -17,9 +17,11 @@ Deck::Deck(){
     
     //prntDeck();
 }
+//deletes Cards array
 Deck::~Deck(){
     delete []cards;
 }
+//sets up new Cards array with respective values
 Cards *Deck::initializeDeck(int size){
     //for loop to fill new Cards array with information like suit, name, and values based on order
     //will be shuffled in a separate function
@@ -95,7 +97,7 @@ Cards *Deck::initializeDeck(int size){
     }
     return deck;
 }
-
+//Shuffles deck
 void Deck::shuffleDeck(){
     int x = time(0);
     srand(x);
@@ -112,8 +114,9 @@ void Deck::shuffleDeck(){
     }
     cardsDrawn = 0;
     //cout that was used to make sure this function was called
-    cout << "Deck Shuffled!" << endl;
+    cout << "Deck Shuffled!\n" << endl;
 }
+//Function that checks if the deck is ready to be shuffled again
 void Deck::checkShuffle(){
     if(cardsDrawn >= shuffleMarker){
         shuffleDeck();
@@ -124,20 +127,20 @@ void Deck::prntDeck(){
         cout << getName(i) << " of " << getSuit(i) << endl;
     }
 }
-
+//Function to draw next card
 Cards Deck::drawCard(){
     Cards c;
     c = cards[cardsDrawn];
     cardsDrawn ++;
     return c;
 }
-
+//Function that returns a specific card's name
 const string Deck::getName(int index) const{
     string n;
     n = cards[index].name;
     return n;
 }
-
+//Function that returns a specific card's suit
 const string Deck::getSuit(int index) const{
     string n;
     switch(cards[index].suit){

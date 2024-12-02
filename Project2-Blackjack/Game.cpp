@@ -6,7 +6,6 @@ using namespace std;
 
 Game::Game(){
     deck = new Deck;
-    player = new Player;
     dealer = new Dealer;
 }
 Game::~Game(){
@@ -39,7 +38,7 @@ void Game::playGame(){
         //checks if the deck is in need of a reshuffling
         deck->checkShuffle();
         //function that retrieves bet and validates input
-        bet = validateBet();
+        bet = validateBet<float>();
         //if input is 0, player quits game
         if(bet == 0){
             //saveFile(dataFile, player);
@@ -89,19 +88,22 @@ void Game::playHand(){
         winConditions();
     }
 }
-float Game::validateBet(){
+template <typename T>
+T Game::validateBet(){
     bool validated = false;
-    float bet;
+    int bet;
+    //loop that iterates until user inputs a proper bet amount
     while(validated == false){
         cout << "Please enter bet (Cash: $" << player->getCash() << ")\n(Enter 0 to exit) : " << endl;
         try{
-            //cin >> bet;
+            //checks if input is a number, if not then it throws an error
             if(!(cin>>bet)){
                 cin.clear();
                 cin.ignore();
                 string exceptionString = "Please enter a number!\n";
                 throw exceptionString;
             }
+            //checks if bet is within player's means
             if(bet>player->getCash() || bet < 0){
                 if(bet > player->getCash()){
                     string exceptionString = "Enter bet that you can afford!\n";
@@ -112,6 +114,7 @@ float Game::validateBet(){
                     throw exceptionString;
                 }
             }
+            //if the program reaches this point then input is valid
             validated = true;
         }
         catch(string exceptionString){
@@ -205,32 +208,69 @@ void Game::winConditions(){
     }
 }
 void Game::loadGame(){
+    char input;
+    input = validateInput();
+    if(input == 'Y' || input == 'y'){
+        loadProfile();
+    }
+    else{
+        newProfile();
+    }
+}
+char Game::validateInput(){
+    char input;
+    cout << "Would you like to start a new profile or load previous profile?"
+            << "\n(Y = load profile / N = new profile): ";
+    cin >> input;
+    while((input != 'Y' && input != 'y') && (input != 'N' && input != 'n') ){
+        cout << "Would you like to start a new profile or load previous profile?"
+            << "\n(Y = load profile / N = new profile): ";
+        cin.clear();
+        cin >> input;
+        cout << input;
+    }
+    return input;
+}
+void Game::loadProfile(){
+    string name;
     float cash;
-    data.open("save.txt", ios::in | ios::binary);
+    data.open("save.txt", ios::in);
     //creates new save file if none is found
     if(data.fail()){
-        //cout << "Save file not found, creating new save file." << endl;
-        data.open("save.txt", ios::out | ios::binary);
+        cout << "Save file not found, creating new save file." << endl;
+        data.open("save.txt", ios::out);
+        player = new Player;
     }
     //loads previous cash amount. If 0 then resets to 200.
     else{
         //cout << "Save file loaded!" << endl;
-        data.read(reinterpret_cast<char*>(&cash), sizeof(cash));
-        player->setCash(cash);
-        cout << "Welcome back!\n";
+        getline(data, name);
+        data >> cash;
+        player = new Player(name, cash);
+        cout <<endl;
+        cout << "Welcome back " << player->getName() << "!\n";
+        //checks if player lost all money from last game and resets cash to 200 if true
         if(player->getCash() <= 0){
-            cout << "After losing all your money last time, you managed to acquire $200" << endl;
+            cout << "After losing all your money last time, you managed to acquire $200\n" << endl;
             player->setCash(200);
         }
     }
     data.close();
-    
+}
+void Game::newProfile(){
+    //inputs user name to use in player constructor
+    string input;
+    cout << "Enter name: ";
+    cin.ignore();
+    getline(cin, input);
+    player = new Player(input);
 }
 void Game::saveGame(){
     //saves player cash for next time program is loaded
     float cash = player->getCash();
-    data.open("save.txt", ios::out | ios::binary);
-    data.write(reinterpret_cast<char*>(&cash), sizeof(cash));
-    //cout << "File saved!" << endl;
+    string name = player->getName();
+    data.open("save.txt", ios::out);
+    data << name << endl;
+    data << cash;
     data.close();
 }

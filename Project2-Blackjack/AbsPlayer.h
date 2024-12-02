@@ -22,4 +22,3 @@ class AbsPlayer{
 };
 
 #endif /* ABSPLAYER_H */
-
