@@ -32,6 +32,4 @@ class Dealer : public AbsPlayer{
         bool operator == (Dealer *);
 };
 
-
 #endif /* DEALER_H */
-

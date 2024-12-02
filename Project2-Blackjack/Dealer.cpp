@@ -15,7 +15,7 @@ void Dealer::drawCard(Deck *deck){
     hand.push_back(deck->drawCard());
 }
 void Dealer::displayHand(bool stand){
-    cout << "\n" << name << " Hand: " << endl;
+    cout << "\n" << name << "'s Hand: " << endl;
     if(stand == false){
         cout << hand[0].name << " of " << getSuit(0) << endl;
         cout << "Dealer's second card is currently face down.\n" << endl;

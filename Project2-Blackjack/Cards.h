@@ -19,4 +19,3 @@ struct Cards {
 };
 
 #endif /* CARDS_H */
-

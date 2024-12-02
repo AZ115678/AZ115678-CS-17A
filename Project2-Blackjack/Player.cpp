@@ -14,6 +14,11 @@ Player::Player(string n){
     handSize = 0;
     name = n;
 }
+Player::Player(string n, float c){
+    cash = c;
+    handSize = 0;
+    name = n;
+}
 Player::Player(const Player&obj){
     name = obj.name;
     hand = obj.hand;
@@ -27,7 +32,7 @@ Player::~Player(){
     
 }
 void Player::displayHand(){
-    cout << "\n" << name << " Hand: " << endl;
+    cout << "\n" << name << "'s Hand: " << endl;
     for(int i=0;i<handSize;i++){
         cout << hand[i].name << " of " << getSuit(i) << endl;
     }
