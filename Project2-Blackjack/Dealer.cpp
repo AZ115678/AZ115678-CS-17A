@@ -13,32 +13,35 @@ void Dealer::initializeHand(){
 void Dealer::drawCard(Deck *deck){
     handSize ++;
     hand.push_back(deck->drawCard());
+    handValue = setHandValue();
 }
 void Dealer::displayHand(bool stand){
     cout << "\n" << name << "'s Hand: " << endl;
     if(stand == false){
-        cout << hand[0].name << " of " << getSuit(0) << endl;
+        cout << getCard(0) << endl;
         cout << "Dealer's second card is currently face down.\n" << endl;
     }
     else{
         for(int i=0;i<handSize;i++){
-            cout << hand[i].name << " of " << getSuit(i) << endl;
+            cout << getCard(i) << endl;
         }
-        handValue = setHandValue();
+        //handValue = setHandValue();
         cout << name << " is at " << handValue << "\n" << endl;
     }
 }
-string Dealer::getSuit(int index){
+string Dealer::getCard(int index){
+    string cardInfo = "";
     string suit;
     
+    cardInfo += hand[index].name;
     switch(hand[index].suit){
         case(SPADES): suit = "Spades"; break;
         case(DIAMONDS): suit = "Diamonds"; break;
         case(CLUBS): suit = "Clubs"; break;
         case(HEARTS): suit = "Hearts"; break;
     }
-    
-    return suit;
+    cardInfo += " of " + suit;
+    return cardInfo;
 }
 int Dealer::setHandValue(){
     handValue = 0;

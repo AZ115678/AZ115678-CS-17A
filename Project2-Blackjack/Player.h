@@ -25,7 +25,7 @@ class Player : public Dealer{
         //copy constructor
         Player(const Player &);
         ~Player();
-        void displayHand();
+        void displayHand();     //Polymorphic from dealer class
         void setBet(float);
         void doubleBet();
         void winBet(bool);

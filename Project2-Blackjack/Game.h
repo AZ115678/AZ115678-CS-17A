@@ -22,6 +22,7 @@ class Game{
         template <typename T> T validateBet();
         char validateInput();
         void playerActions();
+        void playerConfirmation();
         void dealerActions();
         void winConditions();
         void loadProfile();

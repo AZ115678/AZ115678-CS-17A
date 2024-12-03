@@ -24,7 +24,7 @@ class Dealer : public AbsPlayer{
         virtual void initializeHand();
         virtual void drawCard(Deck *);
         virtual void displayHand(bool);
-        virtual string getSuit(int);
+        virtual string getCard(int);
         virtual int getHandValue(){return handValue;}
         virtual int getHandSize(){return handSize;}
         bool checkBust();
