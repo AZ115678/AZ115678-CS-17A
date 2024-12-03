@@ -15,7 +15,7 @@ class AbsPlayer{
         virtual void initializeHand() = 0;
         virtual void drawCard(Deck *) = 0;
         virtual void displayHand(bool) = 0;
-        virtual string getSuit(int) = 0;
+        virtual string getCard(int) = 0;
         virtual int getHandValue() = 0;
         virtual int getHandSize() = 0;
         

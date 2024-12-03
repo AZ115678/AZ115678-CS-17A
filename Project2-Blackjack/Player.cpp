@@ -32,9 +32,9 @@ Player::~Player(){
     
 }
 void Player::displayHand(){
-    cout << "\n" << name << "'s Hand: " << endl;
+    cout << "\n\n\n" << name << "'s Hand: " << endl;
     for(int i=0;i<handSize;i++){
-        cout << hand[i].name << " of " << getSuit(i) << endl;
+        cout << getCard(i) << endl;
     }
     handValue = setHandValue();
     cout << name <<" at " << handValue << ": \n" << endl;
@@ -50,11 +50,11 @@ void Player::doubleBet(){
 void Player::winBet(bool blackjack){
     if(blackjack == true){
         cash += bet * 2.5;
-        cout << "Player wins $" << bet*2.5 << "!" << endl;
+        cout << name <<" wins $" << bet*2.5 << "!" << endl;
     }
     else{
         cash += bet * 2;
-        cout << "Player wins $" << bet*2 << "!" << endl;
+        cout << name << " wins $" << bet*2 << "!" << endl;
     }
 }
 void Player::pushBet(){
@@ -62,11 +62,11 @@ void Player::pushBet(){
     cout << "Push! $" << bet << " returned." << endl;
 }
 void Player::loseBet(){
-    cout << "You lost your bet of $" << bet << "..." << endl;
+    cout << name << " lost bet of $" << bet << "..." << endl;
 }
 //overloaded ++ prefix operator
 Player& Player::operator++(){
     cash += bet *2;
-    cout << "Player wins $" << bet*2 << "!" << endl;
+    cout << name <<" wins $" << bet*2 << "!" << endl;
     return *this;
 }

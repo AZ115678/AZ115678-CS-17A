@@ -65,7 +65,8 @@ void Game::playHand(){
         stand = true;
         player->displayHand();
         dealer->displayHand(stand);
-        cout << "You lost..." << endl;
+        cout << player->getName() <<" lost..." << endl;
+        playerConfirmation();
     }
     //after player action is done, check for any blackjack actions
     else if(blackjack == true){
@@ -80,6 +81,7 @@ void Game::playHand(){
         else{
             player->winBet(blackjack);
         }
+        playerConfirmation();
     }
     //dealer's actions start if player action is done and no blackjack was drawn
     else{
@@ -139,6 +141,10 @@ void Game::playerActions(){
             blackjack = true;
             stand = true;
         }
+        else if(player->getHandValue() == 21){
+            cout << "Twenty One!" << endl;
+            stand = true;
+        }
         else{
             //checks if player has already hit on current hand, if not they have the option to double bet
             if(player->getHandSize() == 2 && (player->getBet() <= player->getCash())){
@@ -157,27 +163,49 @@ void Game::playerActions(){
             else if(strcmp(input, "hit") == 0 || strcmp(input, "Hit") == 0 || strcmp(input, "h") == 0){
                 cout << "Player hits at " << player->getHandValue() << "\n" << endl;
                 player->drawCard(deck);
+                cout << "Player draws " << player->getCard(player->getHandSize()-1) << endl;
             }
             else if(player->getHandSize() == 2 && (strcmp(input, "double") == 0 || strcmp(input, "Double") == 0 || strcmp(input, "d") == 0) && (player->getBet() <= player->getCash())){
                 //player->cash = player->cash - bet;
                 cout << "Player doubles bet of " << player->getBet() << endl;
                 player->doubleBet();
                 player->drawCard(deck);
+                cout << "Player draws " << player->getCard(player->getHandSize()-1) << endl;
                 stand = true;
             }
         }
+        
+        playerConfirmation();
         bust = player->checkBust();
+        if(bust == true){
+            playerConfirmation();
+        }
     }
 }
+void Game::playerConfirmation(){
+    //used to help player keep track of what is going on
+    string confirm;
+    cout << "\n(Press enter to continue) " << endl;
+    getline(cin, confirm);
+}
 void Game::dealerActions(){
+    //player->displayHand();
+    int draw = 0;
+    cout << "\nDealer's Turn." << endl;
+    playerConfirmation();
+    dealer->displayHand(stand);
+    if(dealer->getHandValue() < 17){
+        //dealer must hit on hand value 16 and below
+        while(dealer->getHandValue() < 17){
+            dealer->drawCard(deck);
+            cout << "Dealer draws " << dealer->getCard(dealer->getHandSize() - 1) << endl;
+            cout << "Dealer is at " << dealer->getHandValue();
+            playerConfirmation();
+            draw ++;
+        }
+    }
     player->displayHand();
     dealer->displayHand(stand);
-    //dealer must hit on hand value 16 and below
-    while(dealer->getHandValue() < 17){
-        dealer->drawCard(deck);
-        player->displayHand();
-        dealer->displayHand(stand);
-    }
     
 }
 void Game::winConditions(){
@@ -196,7 +224,7 @@ void Game::winConditions(){
         //
         Player temp(*player);
         *player = ++temp;
-        //player->winBet(blackjack);
+        player->winBet(blackjack);
     }
     //checks for push with overloaded == relational operator
     else if(player->operator ==(dealer)){
@@ -206,6 +234,7 @@ void Game::winConditions(){
         cout << "Dealer wins..." << endl;
         player->loseBet();
     }
+    playerConfirmation();
 }
 void Game::loadGame(){
     char input;
