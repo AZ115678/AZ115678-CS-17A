@@ -1,3 +1,10 @@
+/* 
+ * File:   Player.h
+ * Author: Adam Zavala
+ * Purpose: 
+ * Created on November 4, 2024, 12:11 PM
+ */
+
 #include "Deck.h"
 #include <cstdlib>
 #include <iostream>

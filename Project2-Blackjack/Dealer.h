@@ -27,6 +27,8 @@ class Dealer : public AbsPlayer{
         virtual string getCard(int);
         virtual int getHandValue(){return handValue;}
         virtual int getHandSize(){return handSize;}
+        bool checkInsurance();
+        bool checkBlackjack();
         bool checkBust();
         bool operator > (Dealer *);
         bool operator == (Dealer *);

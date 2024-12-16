@@ -1,3 +1,10 @@
+/* 
+ * File:   Player.h
+ * Author: Adam Zavala
+ * Purpose: 
+ * Created on November 4, 2024, 12:11 PM
+ */
+
 #include "Player.h"
 #include <cstdlib>
 #include <vector>
@@ -43,9 +50,19 @@ void Player::setBet(float b){
     bet = b;
     cash -= b;
 }
+void Player::setInsurance(float ins){
+    insurance = ins;
+    cash -= ins;
+}
 void Player::doubleBet(){
     cash -= bet;
     bet = bet * 2;
+}
+void Player::winIns(bool ins){
+    if(ins == true){
+        cash += insurance * 2;
+        cout << name << " wins insurance payout of $" << insurance * 2 << endl;
+    }
 }
 void Player::winBet(bool blackjack){
     if(blackjack == true){
