@@ -1,3 +1,10 @@
+/* 
+ * File:   Player.h
+ * Author: Adam Zavala
+ * Purpose: 
+ * Created on November 4, 2024, 12:11 PM
+ */
+
 #include "Game.h"
 #include <iostream>
 #include <cstring>
@@ -17,6 +24,7 @@ void Game::initializeHand(){
     //clears and resets hands for both the player and dealer
     player->initializeHand();
     dealer->initializeHand();
+    
     //for loop based on cardsDrawn integer which keeps track drawn cards so that each draw will simulate the next card that is coming up
     //ex: first card drawn is deck[0] and cardsDrawn is now 1. So next drawn card is deck[cardsDrawn] which is deck[1]
     for(int i=0;i<4;i++){
@@ -73,8 +81,9 @@ void Game::playHand(){
         player->displayHand();
         dealer->displayHand(stand);
         //checks if player and dealer both got blackjack from initial hand
-        if(dealer->getHandValue() == 21){
+        if(dealer->checkBlackjack() == true){
             cout << "Dealer reveals a blackjack...\n"<<endl;
+            player->winIns(ins);
             player->pushBet();
         }
         //player gets a bigger payout for getting blackjack
@@ -85,7 +94,9 @@ void Game::playHand(){
     }
     //dealer's actions start if player action is done and no blackjack was drawn
     else{
-        dealerActions();
+        if(dealer->checkBlackjack() != true){
+            dealerActions();
+        }
         //checks if player wins after dealer actions are complete
         winConditions();
     }
@@ -93,26 +104,46 @@ void Game::playHand(){
 template <typename T>
 T Game::validateBet(){
     bool validated = false;
+    string inp;
     int bet;
     //loop that iterates until user inputs a proper bet amount
     while(validated == false){
-        cout << "Please enter bet (Cash: $" << player->getCash() << ")\n(Enter 0 to exit) : " << endl;
+        string exceptionString;
+        cout << "Please enter bet (Cash: $" << player->getCash() << ")" << endl;
+        if(player->getBet() > 0){
+            cout << "Enter R to replace bet of $" << player->getBet() << endl;
+        }
+        cout << "Enter 0 to exit : " << endl;
         try{
-            //checks if input is a number, if not then it throws an error
-            if(!(cin>>bet)){
-                cin.clear();
-                cin.ignore();
-                string exceptionString = "Please enter a number!\n";
-                throw exceptionString;
+            cin>>inp;
+            if(inp == "R" || inp == "r"){
+                bet = player->getBet();
+            }
+            else{
+                //checks if input is a digit
+                try{
+                    for(char c : inp){
+                        int n = c;
+                        if(!(c >= 48 && c <= 57)){
+                            exceptionString = errorCode(0);
+                            throw exceptionString;
+                        }
+                    }
+                    bet = stoi(inp);
+                }
+                //if input is not a digit, throw error
+                catch(string exceptionString){
+                    cout << exceptionString;
+                }
             }
             //checks if bet is within player's means
             if(bet>player->getCash() || bet < 0){
                 if(bet > player->getCash()){
-                    string exceptionString = "Enter bet that you can afford!\n";
+                    exceptionString = errorCode(1);
                     throw exceptionString;
                 }
                 else{
-                    string exceptionString = "Enter amount bigger than 0!\n";
+                    exceptionString = errorCode(2);
                     throw exceptionString;
                 }
             }
@@ -130,48 +161,59 @@ T Game::validateBet(){
 void Game::playerActions(){
     const int SIZE = 80;
     char input[SIZE];
+    
     //loops through until player either chooses to stand or busts
     cin.ignore();
+    ins = false;
     while(stand == false && bust == false){
         player->displayHand();
         dealer->displayHand(stand);
-        //checks if player has a blackjack from initial hand
-        if(player->getHandValue() == 21 && player->getHandSize() == 2){
-            cout << "BlackJack!" << endl;
-            blackjack = true;
-            stand = true;
+        //checks if player wants to pay insurance if dealer reveals ACE
+        if(dealer->checkInsurance() == true && player->getHandSize() == 2){
+            char c;
+            string message = "\nDealer shows Ace, would you like to play an insurance bet?";
+            message += "\nInsurance bet is : $" + to_string(player->getBet()/2) + "\n";
+            message += "\nPress Y to accept, N to decline: ";
+            c = validateInput(message);
+            if(c == 'Y' || c == 'y'){
+                if(player->getCash() > (player->getBet() / 2)){
+                    cout << player->getName() << " pays Insurance bet of $" << player->getBet() / 2 << endl;
+                    player->setInsurance((player->getBet() / 2));
+                    ins = true;
+                }
+                else{
+                    cout << player->getName() << " can't afford the Insurance bet..." << endl;
+                }
+            }
+            else{
+                cout << player->getName() << " declines Insurance bet." << endl;
+            }
+            playerConfirmation();
         }
-        else if(player->getHandValue() == 21){
-            cout << "Twenty One!" << endl;
+        
+        //check if dealer has blackjack before starting hand options for player
+        if(dealer->checkBlackjack() == true){
+            cout << "Ruh roh!" << endl;
+            if(player->checkBlackjack() == true){
+                cout << "BlackJack!" << endl;
+                blackjack = true;
+            }
             stand = true;
         }
         else{
-            //checks if player has already hit on current hand, if not they have the option to double bet
-            if(player->getHandSize() == 2 && (player->getBet() <= player->getCash())){
-                cout << "Hit, Stand, or Double?" << endl;
+            //checks if player has a blackjack from initial hand
+            if(player->checkBlackjack() == true){
+                cout << "BlackJack!" << endl;
+                blackjack = true;
+                stand = true;
             }
+            else if(player->getHandValue() == 21){
+                cout << "Twenty One!" << endl;
+                stand = true;
+            }
+            //if play does not have a blackjack, or 21 from a card draw, then they still have options
             else{
-                cout << "Hit or Stand?" << endl;
-            }
-            
-            cin.getline(input, SIZE);
-            
-            if(strcmp(input, "stand") == 0 || strcmp(input, "Stand") == 0 || strcmp(input, "s") == 0){
-                stand = true;
-                cout << "Player stands at " << player->getHandValue() << "\n" << endl;
-            }
-            else if(strcmp(input, "hit") == 0 || strcmp(input, "Hit") == 0 || strcmp(input, "h") == 0){
-                cout << "Player hits at " << player->getHandValue() << "\n" << endl;
-                player->drawCard(deck);
-                cout << "Player draws " << player->getCard(player->getHandSize()-1) << endl;
-            }
-            else if(player->getHandSize() == 2 && (strcmp(input, "double") == 0 || strcmp(input, "Double") == 0 || strcmp(input, "d") == 0) && (player->getBet() <= player->getCash())){
-                //player->cash = player->cash - bet;
-                cout << "Player doubles bet of " << player->getBet() << endl;
-                player->doubleBet();
-                player->drawCard(deck);
-                cout << "Player draws " << player->getCard(player->getHandSize()-1) << endl;
-                stand = true;
+                playerHandInput();
             }
         }
         
@@ -180,6 +222,41 @@ void Game::playerActions(){
         if(bust == true){
             playerConfirmation();
         }
+    }
+}
+void Game::playerHandInput(){
+    const int SIZE = 80;
+    char input[SIZE];
+    
+    //checks if player has already hit on current hand, if not they have the option to double bet
+    if(player->getHandSize() == 2 && (player->getBet() <= player->getCash())){
+        cout << "Hit, Stand, or Double?" << endl;
+    }
+    else{
+        cout << "Hit or Stand?" << endl;
+    }
+    cin.clear();
+    cin.getline(input, SIZE);
+    
+    //if player chooses to stand, their turn ends
+    if(strcmp(input, "stand") == 0 || strcmp(input, "Stand") == 0 || strcmp(input, "s") == 0){
+        stand = true;
+        cout << "Player stands at " << player->getHandValue() << "\n" << endl;
+    }
+    //if player hits, they draw a card
+    else if(strcmp(input, "hit") == 0 || strcmp(input, "Hit") == 0 || strcmp(input, "h") == 0){
+        cout << "Player hits at " << player->getHandValue() << "\n" << endl;
+        player->drawCard(deck);
+        cout << "Player draws " << player->getCard(player->getHandSize()-1) << endl;
+    }
+    //if player doubles, they double their bet amount, draw a single card, and then their turn ends
+    else if(player->getHandSize() == 2 && (strcmp(input, "double") == 0 || strcmp(input, "Double") == 0 || strcmp(input, "d") == 0) && (player->getBet() <= player->getCash())){
+        //player->cash = player->cash - bet;
+        cout << "Player doubles bet of " << player->getBet() << endl;
+        player->doubleBet();
+        player->drawCard(deck);
+        cout << "Player draws " << player->getCard(player->getHandSize()-1) << endl;
+        stand = true;
     }
 }
 void Game::playerConfirmation(){
@@ -194,6 +271,7 @@ void Game::dealerActions(){
     cout << "\nDealer's Turn." << endl;
     playerConfirmation();
     dealer->displayHand(stand);
+    
     if(dealer->getHandValue() < 17){
         //dealer must hit on hand value 16 and below
         while(dealer->getHandValue() < 17){
@@ -215,16 +293,16 @@ void Game::winConditions(){
         player->winBet(blackjack);
     }
     //checks for blackjack
-    else if(dealer->getHandValue() == 21 && dealer->getHandSize() == 2){
+    else if(dealer->checkBlackjack()){
         cout << "Dealer reveals a blackjack...\n"<< endl;
+        player->winIns(ins);
         player->loseBet();
     }
     //compares hand with overloaded > relational operator
     else if(player->operator >(dealer)){
-        //
+        //++ prefix overloaded to receive winnings from bet
         Player temp(*player);
         *player = ++temp;
-        player->winBet(blackjack);
     }
     //checks for push with overloaded == relational operator
     else if(player->operator ==(dealer)){
@@ -238,7 +316,10 @@ void Game::winConditions(){
 }
 void Game::loadGame(){
     char input;
-    input = validateInput();
+    string message = "";
+    message = "Would you like to start a new profile or load previous profile?";
+    message += "\n(Y = load profile / N = new profile): ";
+    input = validateInput(message);
     if(input == 'Y' || input == 'y'){
         loadProfile();
     }
@@ -246,17 +327,25 @@ void Game::loadGame(){
         newProfile();
     }
 }
-char Game::validateInput(){
+char Game::validateInput(string message){
     char input;
-    cout << "Would you like to start a new profile or load previous profile?"
-            << "\n(Y = load profile / N = new profile): ";
-    cin >> input;
-    while((input != 'Y' && input != 'y') && (input != 'N' && input != 'n') ){
-        cout << "Would you like to start a new profile or load previous profile?"
-            << "\n(Y = load profile / N = new profile): ";
-        cin.clear();
+    string error = "Error: ";
+    bool valid = false;
+    //loops until user input is valid
+    while(valid == false){
+        cout << message;
         cin >> input;
-        cout << input;
+        //try catch for input validation
+        try{
+            if((input != 'Y' && input != 'y') && (input != 'N' && input != 'n')){
+                error = errorCode(3);
+                throw error;
+            }
+            valid = true;
+        }
+        catch(string error){
+            cout << error << endl;
+        }
     }
     return input;
 }
@@ -302,4 +391,26 @@ void Game::saveGame(){
     data << name << endl;
     data << cash;
     data.close();
+}
+string Game::errorCode(int code){
+    string errMsg;
+    //returns string that tells user where they went wrong
+    switch(code){
+        case(0):
+            errMsg = "Error: Please enter a number!\n";
+            break;
+        case(1):
+            errMsg = "Error: Enter bet that you can afford!\n";
+            break;
+        case(2):
+            errMsg = "Error: Enter amount bigger than 0!\n";
+            break;
+        case(3):
+            errMsg = "Error: Input Y or N";
+            break;
+        default:
+            errMsg = "Error: ";
+            break;
+    }
+    return errMsg;
 }

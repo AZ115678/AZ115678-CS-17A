@@ -1,3 +1,10 @@
+/* 
+ * File:   Player.h
+ * Author: Adam Zavala
+ * Purpose: 
+ * Created on November 4, 2024, 12:11 PM
+ */
+
 #include "Dealer.h"
 
 Dealer::Dealer(){
@@ -56,6 +63,20 @@ int Dealer::setHandValue(){
         handValue += 10;
     }
     return handValue;
+}
+bool Dealer::checkInsurance(){
+    bool isAce = false;
+    if(hand[0].name == "Ace"){
+        isAce = true;
+    }
+    return isAce;
+}
+bool Dealer::checkBlackjack(){
+    bool bkjk = false;
+    if(handValue == 21 && handSize == 2){
+        bkjk = true;
+    }
+    return bkjk;
 }
 bool Dealer::checkBust(){
     bool bust;
